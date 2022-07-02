@@ -3,7 +3,7 @@
 # Author: Breizhcat
 #
 """
-<plugin key="NissanLeaf" name="Domoticz Nissan Leaf" author="breizhcat" version="1.0.3" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="https://github.com/BreizhCat/DomoticzNissanLeaf">
+<plugin key="NissanLeaf" name="Domoticz Nissan Leaf" author="breizhcat" version="1.0.4" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="https://github.com/BreizhCat/DomoticzNissanLeaf">
     <description>
 		<h2>Nissan Leaf</h2><br/>
 		<h3>Features</h3>
@@ -20,10 +20,10 @@
         <param field="Mode5" label="Region Code" width="500px">
             <options>
                 <option label="Europe" value="NE" />
-                <option label="&Eamp;tats Unis" value="NNA" />
+                <option label="United States" value="NNA" />
                 <option label="Canada" value="NCI" />
-                <option label="Japon" value="NML" />
-                <option label="Australie" value="NMA" />
+                <option label="Japan" value="NML" />
+                <option label="Australia" value="NMA" />
             </options>
         </param>
         <param field="Mode6" label="Debug" width="75px">
@@ -165,8 +165,8 @@ class BasePlugin:
     def onHeartbeat(self):
         _time = datetime.now()
 
-        if _time.minute in [0]:
-            Domoticz.Log("Mise à jour des devices")
+        if (_time.minute in [0,15,30,45] and _time.second < 10):
+            Domoticz.Log("Updating devices")
             self._updateDevices()
 
     def _create_icons(self):
@@ -207,7 +207,7 @@ class BasePlugin:
 
     def _connect_and_update(self):
         try:
-            Domoticz.Log("Thread lancé - Tentative de connexion")
+            Domoticz.Log("Plugin running - Trying to connect")
             leaf = Leaf(Parameters["Username"], Parameters["Password"], region_code=Parameters["Mode5"])
             if leaf:
                 battery = leaf.BatteryStatusRecordsRequest()
@@ -260,9 +260,9 @@ class BasePlugin:
                 if not today:
                     Devices[DEVICE_ODOMETER].Update(nValue = 0, sValue = "0;0") 
 
-                Domoticz.Log("onHeartbeat Connexion ok")
+                Domoticz.Log("onHeartbeat Connection ok")
             else:
-                Domoticz.Log("onHeartbeat Connexion ko")
+                Domoticz.Log("onHeartbeat Connection ko")
         except Exception as err:
             Domoticz.Error("handleThread: "+str(err)+' line '+format(sys.exc_info()[-1].tb_lineno))
 
