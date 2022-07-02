@@ -17,7 +17,7 @@
     <params>
         <param field="Username" label="Nissan Account"  width="150px"  required="true" />
         <param field="Password" label="Nissan Password" width="150px" required="true" password="true" />
-        <param field="Mode5" label="Region Code" width="500px">
+        <param field="Mode5" label="Region Code" width="150px">
             <options>
                 <option label="Europe" value="NE" />
                 <option label="United States" value="NNA" />
